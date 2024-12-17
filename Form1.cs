@@ -30,13 +30,20 @@ namespace DatenBankZoo
             listBoxThemenbereiche.Items.Clear();
             comboBoxThemenBereiche.Items.Clear();
             comboBoxTierThemenbereich.Items.Clear();
-
-            foreach (Themenbereiche theme in liTheme)
+            try
             {
-                listBoxThemenbereiche.Items.Add(theme.TName1);
-                comboBoxThemenBereiche.Items.Add(theme.TName1);
-                comboBoxTierThemenbereich.Items.Add(theme.TName1);
+                foreach (Themenbereiche theme in liTheme)
+                {
+                    listBoxThemenbereiche.Items.Add(theme.TName1);
+                    comboBoxThemenBereiche.Items.Add(theme.TName1);
+                    comboBoxTierThemenbereich.Items.Add(theme.TName1);
+                }
             }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Themenbereiche können nicht angezeigt werden, Fehler: " + ex.Message);
+            }
+            
         }
 
         private void dispTier()
@@ -44,27 +51,35 @@ namespace DatenBankZoo
             litier = db.getTier();
             dataGridViewTiere.Rows.Clear();
 
-
-            foreach (Tier tier in litier)
+            try
             {
+                foreach (Tier tier in litier)
+                {
 
 
-                string taName =
-                    litiera.Find(x => x.TierartId == tier.TierartID).Name;
+                    string taName =
+                        litiera.Find(x => x.TierartId == tier.TierartID).Name;
 
 
-                string gName =
-                    ligehege.Find(x => x.GehegeID == tier.GehegeID).Name;
+                    string gName =
+                        ligehege.Find(x => x.GehegeID == tier.GehegeID).Name;
 
 
-                int thnr = ligehege.Find(x => x.GehegeID == tier.GehegeID).ThemenbereichID;
-                string tbName = liTheme.Find(x => x.TNr1 == thnr).TName1;
+                    int thnr = ligehege.Find(x => x.GehegeID == tier.GehegeID).ThemenbereichID;
+                    string tbName = liTheme.Find(x => x.TNr1 == thnr).TName1;
 
 
-                // Daten zur DataGridView hinzufügen
-                dataGridViewTiere.Rows.Add(tier.Name, taName, gName, tbName);
+                    // Daten zur DataGridView hinzufügen
+                    dataGridViewTiere.Rows.Add(tier.Name, taName, gName, tbName);
 
+                }
             }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Tiere können nicht angezeigt werden, Fehler: " + ex.Message);
+            }
+
+            
         }
 
         private void dispTierart()
@@ -72,175 +87,236 @@ namespace DatenBankZoo
             litiera = db.getTierart();
             listBoxTierart.Items.Clear();
 
-            foreach (Tierart tiera in litiera)
+            try
             {
-                listBoxTierart.Items.Add(tiera.Name);
-                comboBoxTierTierart.Items.Add(tiera.Name);
+                foreach (Tierart tiera in litiera)
+                {
+                    listBoxTierart.Items.Add(tiera.Name);
+                    comboBoxTierTierart.Items.Add(tiera.Name);
+                }
             }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Tierarten können nicht angezeigt werden, Fehler: " + ex.Message);
+            }
+            
         }
 
         private void dispGehege()
         {
             ligehege = db.getGehege();
 
-            foreach (Gehege gehege in ligehege)
+            try
             {
+                foreach (Gehege gehege in ligehege)
+                {
 
-                comboBoxTierGehege.Items.Add(gehege.Name);
+                    comboBoxTierGehege.Items.Add(gehege.Name);
 
-                string s = liTheme.Find(x => x.TNr1 == gehege.ThemenbereichID).TName1;
-                dataGridGehege.Rows.Add(gehege.Name, s);
+                    string s = liTheme.Find(x => x.TNr1 == gehege.ThemenbereichID).TName1;
+                    dataGridGehege.Rows.Add(gehege.Name, s);
+                }
             }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Gehege können nicht angezeigt werden, Fehler: " + ex.Message);
+            }
+            
         }
 
         private void buttonThemenbereichSpeichern_Click(object sender, EventArgs e)
         {
-            if (tbTheme.Text != "")
+            try
             {
-                // Immer überprüfen ob ein Element ausgewählt wurde
-                int nr = listBoxThemenbereiche.SelectedIndex == -1 ? -1 : liTheme[listBoxThemenbereiche.SelectedIndex].TNr1;
-                // -1 , da die ID automatisch generiert wird
-                Themenbereiche theme = new Themenbereiche(-1, tbTheme.Text);
-                
-                db.newThemenbereich(theme);
+                if (tbTheme.Text != "")
+                {
+                    // Immer überprüfen ob ein Element ausgewählt wurde
+                    int nr = listBoxThemenbereiche.SelectedIndex == -1 ? -1 : liTheme[listBoxThemenbereiche.SelectedIndex].TNr1;
+                    // -1 , da die ID automatisch generiert wird
+                    Themenbereiche theme = new Themenbereiche(-1, tbTheme.Text);
 
-                listBoxThemenbereiche.Items.Clear();
-                dispThemenbereiche();
-                MessageBox.Show(string.Format("{0} erfolgreich gespeichert", theme.TName1));
+                    db.newThemenbereich(theme);
+
+                    listBoxThemenbereiche.Items.Clear();
+                    dispThemenbereiche();
+                    MessageBox.Show(string.Format("{0} erfolgreich gespeichert", theme.TName1));
+                }
+                else
+                {
+                    MessageBox.Show("Bitte geben Sie einen Themenbereich ein");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Bitte geben Sie einen Themenbereich ein");
+                MessageBox.Show("Themenbereich kann nicht gespeichert werden, Fehler: " + ex.Message);
             }
 
         }
 
         private void buttonSpeichernTierart_Click(object sender, EventArgs e)
         {
-            if (tbTierart.Text != "")
+            try
             {
-                int nr = listBoxTierart.SelectedIndex == -1 ? -1 : litiera[listBoxTierart.SelectedIndex].TierartId;
+                if (tbTierart.Text != "")
+                {
+                    int nr = listBoxTierart.SelectedIndex == -1 ? -1 : litiera[listBoxTierart.SelectedIndex].TierartId;
 
-                Tierart tiera = new Tierart(-1, tbTierart.Text);
-                
-                db.newTierart(tiera);
-                listBoxTierart.Items.Clear();
-                dispTierart();
-                
-                tbTierart.Text = "";
-                MessageBox.Show(string.Format("{0} erfolgreich gespeichert", tiera.Name));
+                    Tierart tiera = new Tierart(-1, tbTierart.Text);
+
+                    db.newTierart(tiera);
+                    listBoxTierart.Items.Clear();
+                    dispTierart();
+
+                    tbTierart.Text = "";
+                    MessageBox.Show(string.Format("{0} erfolgreich gespeichert", tiera.Name));
+                }
+                else
+                {
+                    MessageBox.Show("Bitte geben Sie eine Tierart ein");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Bitte geben Sie eine Tierart ein");
+                MessageBox.Show("Tierart kann nicht gespeichert werden, Fehler: " + ex.Message);
             }
         }
 
         private void buttonTierSpeichern_Click(object sender, EventArgs e)
         {
-            // Prüfen, ob alle erforderlichen Felder ausgefüllt sind
-            if (string.IsNullOrWhiteSpace(tbTierName.Text) ||
+            try
+            {// Prüfen, ob alle erforderlichen Felder ausgefüllt sind
+            
+                if (string.IsNullOrWhiteSpace(tbTierName.Text) ||
                 comboBoxTierGehege.SelectedIndex == -1 ||
                 comboBoxTierTierart.SelectedIndex == -1)
-            {
-                MessageBox.Show("Bitte alle Felder ausfüllen.", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                {
+                    MessageBox.Show("Bitte alle Felder ausfüllen.", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Neues Tier erstellen (TierID auf -1, weil es neu ist)
+                Tier tier = new Tier(
+                                -1, // Platzhalter für neue IDs
+                                tbTierName.Text,
+                                ligehege[comboBoxTierGehege.SelectedIndex].GehegeID,
+                                litiera[comboBoxTierTierart.SelectedIndex].TierartId
+                );
+
+                // In die Datenbank speichern
+                db.newTier(tier);
+
+                dataGridViewTiere.Rows.Clear();
+
+                // DataGridView aktualisieren
+                dispTier();
+                MessageBox.Show(string.Format("{0} erfolgreich gespeichert", tier.Name));
             }
-
-            // Neues Tier erstellen (TierID auf -1, weil es neu ist)
-            Tier tier = new Tier(
-                -1, // Platzhalter für neue IDs
-                tbTierName.Text,
-                ligehege[comboBoxTierGehege.SelectedIndex].GehegeID,
-                litiera[comboBoxTierTierart.SelectedIndex].TierartId
-            );
-
-            // In die Datenbank speichern
-            db.newTier(tier);
-
-            dataGridViewTiere.Rows.Clear();
-
-            // DataGridView aktualisieren
-            dispTier();
-            MessageBox.Show(string.Format("{0} erfolgreich gespeichert", tier.Name));
+            catch(Exception ex)
+            {
+                MessageBox.Show("Tier kann nicht gespeichert werden, Fehler: " + ex.Message);
+            }
         }
 
         private void buttonGehegeUnk_Click(object sender, EventArgs e)
         {
-            if (tbGehegeName.Text != "")
+            try
             {
+                if (tbGehegeName.Text != "")
+                {
 
-                Gehege gh = new Gehege(-1, tbGehegeName.Text, liTheme[comboBoxThemenBereiche.SelectedIndex].TNr1);
-                db.newGehege(gh);
+                    Gehege gh = new Gehege(-1, tbGehegeName.Text, liTheme[comboBoxThemenBereiche.SelectedIndex].TNr1);
+                    db.newGehege(gh);
 
-                MessageBox.Show(string.Format("{0} erfolgreich gespeichert", gh.Name));
-                
-                tbGehegeName.Text = "";
-                comboBoxThemenBereiche.SelectedIndex = -1;
-                dataGridGehege.Rows.Clear();
-                dispGehege();
+                    MessageBox.Show(string.Format("{0} erfolgreich gespeichert", gh.Name));
 
+                    tbGehegeName.Text = "";
+                    comboBoxThemenBereiche.SelectedIndex = -1;
+                    dataGridGehege.Rows.Clear();
+                    dispGehege();
+
+                }
             }
-
+            catch(Exception ex)
+            {
+                MessageBox.Show("Gehege kann nicht gespeichert werden, Fehler: " + ex.Message);
+            }
         }
 
         private void buttonLoeschen_Click(object sender, EventArgs e)
         {
-            // -1 Prüfung ob ein Element ausgewählt wurde
-            if (listBoxThemenbereiche.SelectedIndex != -1)
-            {
-                int which = liTheme[listBoxThemenbereiche.SelectedIndex].TNr1;
-                string name = liTheme[listBoxThemenbereiche.SelectedIndex].TName1;
-                db.delThemenbereich(which);
-                dispThemenbereiche();
-                MessageBox.Show(string.Format("{0} erfolgreich gelöscht", name));
+            try
+            {   // -1 Prüfung ob ein Element ausgewählt wurde
+                if (listBoxThemenbereiche.SelectedIndex != -1)
+                {
+                    int which = liTheme[listBoxThemenbereiche.SelectedIndex].TNr1;
+                    string name = liTheme[listBoxThemenbereiche.SelectedIndex].TName1;
+                    db.delThemenbereich(which);
+                    dispThemenbereiche();
+                    MessageBox.Show(string.Format("{0} erfolgreich gelöscht", name));
+                }
+                else
+                {
+                    MessageBox.Show("Bitte wählen Sie einen Themenbereich aus");
+                }
             }
-            else
+            catch(Exception ex)
             {
-                MessageBox.Show("Bitte wählen Sie einen Themenbereich aus");
+                MessageBox.Show("Themenbereich kann nicht gelöscht werden, Fehler: " + ex.Message);
             }
-
         }
 
         private void buttonLöschenTierart_Click(object sender, EventArgs e)
         {
-            if (listBoxTierart.SelectedIndex != -1)
+            try
             {
-                int which = litiera[listBoxTierart.SelectedIndex].TierartId;
-                string name = litiera[listBoxTierart.SelectedIndex].Name;
-                
-                db.delTierart(which);
-                
-                listBoxTierart.Items.Clear();
-                dispTierart();
-                
-                tbTierart.Text = "";
-                MessageBox.Show(string.Format("{0} erfolgreich gelöscht", name));
+                if (listBoxTierart.SelectedIndex != -1)
+                {
+                    int which = litiera[listBoxTierart.SelectedIndex].TierartId;
+                    string name = litiera[listBoxTierart.SelectedIndex].Name;
+
+                    db.delTierart(which);
+
+                    listBoxTierart.Items.Clear();
+                    dispTierart();
+
+                    tbTierart.Text = "";
+                    MessageBox.Show(string.Format("{0} erfolgreich gelöscht", name));
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Tierart kann nicht gelöscht werden, Fehler: " + ex.Message);
             }
         }
 
         private void buttonTierLoeschen_Click(object sender, EventArgs e)
         {
-            // Prüfen, ob eine Zeile selektiert ist
-            if (dataGridViewTiere.SelectedRows.Count > 0)
-            {
-                // TierID der selektierten Zeile auslesen
-                int selectedRowIndex = dataGridViewTiere.SelectedRows[0].Index;
-                string tierName = litier[selectedRowIndex].Name;
+            try
+            {// Prüfen, ob eine Zeile selektiert ist
+                if (dataGridViewTiere.SelectedRows.Count > 0)
+                {
+                    // TierID der selektierten Zeile auslesen
+                    int selectedRowIndex = dataGridViewTiere.SelectedRows[0].Index;
+                    string tierName = litier[selectedRowIndex].Name;
 
-                //// Datenbank löschen
+                    //// Datenbank löschen
 
 
-                db.delTier(litier[selectedRowIndex].TierID);
+                    db.delTier(litier[selectedRowIndex].TierID);
 
-                dataGridViewTiere.Rows.Clear();
-                // Anzeige aktualisieren
-                dispTier();
-                MessageBox.Show(string.Format("{0} wurde erfolgreich gelöscht", tierName));
+                    dataGridViewTiere.Rows.Clear();
+                    // Anzeige aktualisieren
+                    dispTier();
+                    MessageBox.Show(string.Format("{0} wurde erfolgreich gelöscht", tierName));
+                }
+                else
+                {
+                    MessageBox.Show("Bitte eine Zeile auswählen, die gelöscht werden soll.", "Hinweis", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
-            else
+            catch(Exception ex)
             {
-                MessageBox.Show("Bitte eine Zeile auswählen, die gelöscht werden soll.", "Hinweis", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Tier kann nicht gelöscht werden, Fehler: " + ex.Message);
             }
         }
 
