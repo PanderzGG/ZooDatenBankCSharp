@@ -82,6 +82,20 @@
             radioButtonLeereGehege = new RadioButton();
             radioButtonWelcheTiereGehege = new RadioButton();
             radioButtonAnzahlTiereZoo = new RadioButton();
+            tabPagePersonal = new TabPage();
+            listBoxNormalPfleger = new ListBox();
+            listBoxHauptpfleger = new ListBox();
+            lbNormalPfleger = new Label();
+            lbHauptpfleger = new Label();
+            textBoxArbeitskraft = new TextBox();
+            lbPersonalName = new Label();
+            lbPersonalIDWert = new Label();
+            lbPersonalID = new Label();
+            dataGridViewPersonalEinteilung = new DataGridView();
+            Personalnummer = new DataGridViewTextBoxColumn();
+            PersonalName = new DataGridViewTextBoxColumn();
+            GehegeHauptpfleger = new DataGridViewTextBoxColumn();
+            GehegeNormalPfleger = new DataGridViewTextBoxColumn();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             tabPage2.SuspendLayout();
@@ -91,6 +105,8 @@
             ((System.ComponentModel.ISupportInitialize)dataGridViewTiere).BeginInit();
             tabPageStatistik.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewStatistik).BeginInit();
+            tabPagePersonal.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewPersonalEinteilung).BeginInit();
             SuspendLayout();
             // 
             // tabControl1
@@ -101,6 +117,7 @@
             tabControl1.Controls.Add(tabPage3);
             tabControl1.Controls.Add(tabPage4);
             tabControl1.Controls.Add(tabPageStatistik);
+            tabControl1.Controls.Add(tabPagePersonal);
             tabControl1.Location = new Point(12, 12);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
@@ -660,6 +677,134 @@
             radioButtonAnzahlTiereZoo.UseVisualStyleBackColor = true;
             radioButtonAnzahlTiereZoo.CheckedChanged += radioButtonThemenbereichTierarten_CheckedChanged;
             // 
+            // tabPagePersonal
+            // 
+            tabPagePersonal.Controls.Add(listBoxNormalPfleger);
+            tabPagePersonal.Controls.Add(listBoxHauptpfleger);
+            tabPagePersonal.Controls.Add(lbNormalPfleger);
+            tabPagePersonal.Controls.Add(lbHauptpfleger);
+            tabPagePersonal.Controls.Add(textBoxArbeitskraft);
+            tabPagePersonal.Controls.Add(lbPersonalName);
+            tabPagePersonal.Controls.Add(lbPersonalIDWert);
+            tabPagePersonal.Controls.Add(lbPersonalID);
+            tabPagePersonal.Controls.Add(dataGridViewPersonalEinteilung);
+            tabPagePersonal.Location = new Point(4, 24);
+            tabPagePersonal.Name = "tabPagePersonal";
+            tabPagePersonal.Padding = new Padding(3);
+            tabPagePersonal.Size = new Size(619, 438);
+            tabPagePersonal.TabIndex = 5;
+            tabPagePersonal.Text = "Personal";
+            tabPagePersonal.UseVisualStyleBackColor = true;
+            // 
+            // listBoxNormalPfleger
+            // 
+            listBoxNormalPfleger.FormattingEnabled = true;
+            listBoxNormalPfleger.ItemHeight = 15;
+            listBoxNormalPfleger.Location = new Point(421, 107);
+            listBoxNormalPfleger.Name = "listBoxNormalPfleger";
+            listBoxNormalPfleger.Size = new Size(120, 124);
+            listBoxNormalPfleger.TabIndex = 8;
+            // 
+            // listBoxHauptpfleger
+            // 
+            listBoxHauptpfleger.FormattingEnabled = true;
+            listBoxHauptpfleger.ItemHeight = 15;
+            listBoxHauptpfleger.Location = new Point(118, 107);
+            listBoxHauptpfleger.Name = "listBoxHauptpfleger";
+            listBoxHauptpfleger.Size = new Size(120, 124);
+            listBoxHauptpfleger.TabIndex = 7;
+            // 
+            // lbNormalPfleger
+            // 
+            lbNormalPfleger.AutoSize = true;
+            lbNormalPfleger.Location = new Point(320, 107);
+            lbNormalPfleger.Name = "lbNormalPfleger";
+            lbNormalPfleger.Size = new Size(95, 15);
+            lbNormalPfleger.TabIndex = 6;
+            lbNormalPfleger.Text = "Pflegt zusätzlich:";
+            // 
+            // lbHauptpfleger
+            // 
+            lbHauptpfleger.AutoSize = true;
+            lbHauptpfleger.Location = new Point(19, 107);
+            lbHauptpfleger.Name = "lbHauptpfleger";
+            lbHauptpfleger.Size = new Size(93, 15);
+            lbHauptpfleger.TabIndex = 5;
+            lbHauptpfleger.Text = "Hauptpfleger in:";
+            // 
+            // textBoxArbeitskraft
+            // 
+            textBoxArbeitskraft.Location = new Point(200, 51);
+            textBoxArbeitskraft.Name = "textBoxArbeitskraft";
+            textBoxArbeitskraft.Size = new Size(100, 23);
+            textBoxArbeitskraft.TabIndex = 4;
+            // 
+            // lbPersonalName
+            // 
+            lbPersonalName.AutoSize = true;
+            lbPersonalName.Location = new Point(19, 54);
+            lbPersonalName.Name = "lbPersonalName";
+            lbPersonalName.Size = new Size(126, 15);
+            lbPersonalName.TabIndex = 3;
+            lbPersonalName.Text = "Name der Arbeitskraft:";
+            // 
+            // lbPersonalIDWert
+            // 
+            lbPersonalIDWert.AutoSize = true;
+            lbPersonalIDWert.Location = new Point(200, 20);
+            lbPersonalIDWert.Name = "lbPersonalIDWert";
+            lbPersonalIDWert.Size = new Size(62, 15);
+            lbPersonalIDWert.TabIndex = 2;
+            lbPersonalIDWert.Text = "Platzhalter";
+            // 
+            // lbPersonalID
+            // 
+            lbPersonalID.AutoSize = true;
+            lbPersonalID.Location = new Point(19, 20);
+            lbPersonalID.Name = "lbPersonalID";
+            lbPersonalID.Size = new Size(69, 15);
+            lbPersonalID.TabIndex = 1;
+            lbPersonalID.Text = "PersonalID: ";
+            // 
+            // dataGridViewPersonalEinteilung
+            // 
+            dataGridViewPersonalEinteilung.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dataGridViewPersonalEinteilung.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewPersonalEinteilung.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewPersonalEinteilung.Columns.AddRange(new DataGridViewColumn[] { Personalnummer, PersonalName, GehegeHauptpfleger, GehegeNormalPfleger });
+            dataGridViewPersonalEinteilung.Location = new Point(6, 246);
+            dataGridViewPersonalEinteilung.MultiSelect = false;
+            dataGridViewPersonalEinteilung.Name = "dataGridViewPersonalEinteilung";
+            dataGridViewPersonalEinteilung.ReadOnly = true;
+            dataGridViewPersonalEinteilung.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridViewPersonalEinteilung.Size = new Size(607, 186);
+            dataGridViewPersonalEinteilung.TabIndex = 0;
+            dataGridViewPersonalEinteilung.SelectionChanged += dataGridViewPersonalEinteilung_SelectionChanged;
+            // 
+            // Personalnummer
+            // 
+            Personalnummer.HeaderText = "Personalnummer";
+            Personalnummer.Name = "Personalnummer";
+            Personalnummer.ReadOnly = true;
+            // 
+            // PersonalName
+            // 
+            PersonalName.HeaderText = "Vollständiger Name";
+            PersonalName.Name = "PersonalName";
+            PersonalName.ReadOnly = true;
+            // 
+            // GehegeHauptpfleger
+            // 
+            GehegeHauptpfleger.HeaderText = "Hauptpfleger in diesen Gehegen";
+            GehegeHauptpfleger.Name = "GehegeHauptpfleger";
+            GehegeHauptpfleger.ReadOnly = true;
+            // 
+            // GehegeNormalPfleger
+            // 
+            GehegeNormalPfleger.HeaderText = "Betreut zurätzlich";
+            GehegeNormalPfleger.Name = "GehegeNormalPfleger";
+            GehegeNormalPfleger.ReadOnly = true;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -683,6 +828,9 @@
             tabPageStatistik.ResumeLayout(false);
             tabPageStatistik.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewStatistik).EndInit();
+            tabPagePersonal.ResumeLayout(false);
+            tabPagePersonal.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewPersonalEinteilung).EndInit();
             ResumeLayout(false);
         }
 
@@ -742,5 +890,19 @@
         private DataGridView dataGridViewStatistik;
         private Button buttonGehegeLoeschen;
         private Button buttonGehegeNeu;
+        private TabPage tabPagePersonal;
+        private DataGridView dataGridViewPersonalEinteilung;
+        private Label lbNormalPfleger;
+        private Label lbHauptpfleger;
+        private TextBox textBoxArbeitskraft;
+        private Label lbPersonalName;
+        private Label lbPersonalIDWert;
+        private Label lbPersonalID;
+        private ListBox listBoxNormalPfleger;
+        private ListBox listBoxHauptpfleger;
+        private DataGridViewTextBoxColumn Personalnummer;
+        private DataGridViewTextBoxColumn PersonalName;
+        private DataGridViewTextBoxColumn GehegeHauptpfleger;
+        private DataGridViewTextBoxColumn GehegeNormalPfleger;
     }
 }

@@ -23,35 +23,53 @@ namespace DatenBankZoo
 
         public void newThemenbereich(Themenbereiche theme)
         {
-            oeffnen();
-            MySqlCommand com = con.CreateCommand();
-            if(theme.TNr1 == -1)
+            try
             {
-                com.CommandText = string.Format("INSERT INTO Themenbereich VALUES(NULL,'{0}');", theme.TName1);
+                oeffnen();
+                MySqlCommand com = con.CreateCommand();
+                if (theme.TNr1 == -1)
+                {
+                    com.CommandText = string.Format("INSERT INTO Themenbereich VALUES(NULL,'{0}');", theme.TName1);
+                }
+                else
+                {
+                    com.CommandText = string.Format("UPDATE Themenbereich SET Name = '{0}' " + "WHERE ThemenbereichID = {1};", theme.TName1, theme.TNr1);
+                }
+                com.ExecuteNonQuery();
+                schliessen();
             }
-            else
+            catch(Exception ex)
             {
-                com.CommandText = string.Format("UPDATE Themenbereich SET Name = '{0}' " + "WHERE ThemenbereichID = {1};", theme.TName1, theme.TNr1);
+                MessageBox.Show("Funktion newThemenbereich kann nicht ausgeführt werden" + ex.Message);
             }
-            com.ExecuteNonQuery();
-            schliessen();
+            
+            
         }
 
         public void newTierart(Tierart tier)
         {
-            oeffnen();
-            MySqlCommand com = con.CreateCommand();
-            if(tier.TierartId == -1)
+            try
             {
-                com.CommandText = string.Format("INSERT INTO Tierart VALUES(NULL,'{0}');", tier.Name);
+                oeffnen();
+                MySqlCommand com = con.CreateCommand();
+                if (tier.TierartId == -1)
+                {
+                    com.CommandText = string.Format("INSERT INTO Tierart VALUES(NULL,'{0}');", tier.Name);
+                }
+                else
+                {
+                    com.CommandText = string.Format("UPDATE Tierart SET Name = '{0}' " + "WHERE TierartID = {1};", tier.Name, tier.TierartId);
+                }
+                com.ExecuteNonQuery();
+                schliessen();
             }
-            else
+            catch(Exception ex)
             {
-                com.CommandText = string.Format("UPDATE Tierart SET Name = '{0}' " + "WHERE TierartID = {1};", tier.Name, tier.TierartId);
+                MessageBox.Show("Funktion newTierart kann nicht ausgeführt werden" + ex.Message);
             }
-            com.ExecuteNonQuery();
-            schliessen();
+            
         }
+
 
         public void newGehege(Gehege gehege)
         {
@@ -249,6 +267,70 @@ namespace DatenBankZoo
             schliessen();
             return liTier;
         }
+
+        public List<Personal> getPersonal()
+        {
+            List<Personal> liPersonal = new List<Personal>();
+            oeffnen();
+            try
+            {
+                MySqlCommand com = con.CreateCommand();
+                com.CommandText = "SELECT * FROM personal ORDER BY Name";
+                MySqlDataReader reader = com.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    liPersonal.Add(
+                            new Personal(
+                                    reader.GetInt32("PersonalID"),
+                                    reader.GetString("Name")
+                                )
+                            );
+                }
+                reader.Close();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            schliessen();
+            return liPersonal;
+        }
+
+        public List<Personaleinteilung> getEinteilung()
+        {
+            List<Personaleinteilung> liEinteilung = new List<Personaleinteilung>();
+            oeffnen();
+
+            try
+            {
+                MySqlCommand com = con.CreateCommand();
+                com.CommandText = "SELECT * FROM personaleinteilung order by EinteilungsID desc;";
+                MySqlDataReader reader = com.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    liEinteilung.Add(
+                        new Personaleinteilung(
+                                reader.GetInt32("EinteilungsID"),
+                                reader.GetInt32("Hauptpfleger"),
+                                reader.GetInt32("Normalpfleger"),
+                                reader.GetInt32("GehegeID"),
+                                reader.GetInt32("PersonalID")
+                            )
+                        );
+                }
+                reader.Close();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            schliessen();
+            return liEinteilung;
+        }
+
+        
 
         private void oeffnen()
         {

@@ -11,6 +11,8 @@ namespace DatenBankZoo
         private List<Tierart> litiera;
         private List<Gehege> ligehege;
         private List<Tier> litier;
+        private List<Personal> lipersonal;
+        private List<Personaleinteilung> lieinteilung;
         public Form1()
         {
             InitializeComponent();
@@ -18,11 +20,21 @@ namespace DatenBankZoo
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            db = new Datenbank();
+            try
+            {
+                db = new Datenbank();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Fehler beim Laden der Datenbank: " + ex.Message);
+            }
+
             dispThemenbereiche();
             dispGehege();
             dispTierart();
             dispTier();
+            dispPersonal();
+            dispPersonaleinteilung();
         }
         private void dispThemenbereiche()
         {
@@ -39,11 +51,11 @@ namespace DatenBankZoo
                     comboBoxTierThemenbereich.Items.Add(theme.TName1);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Themenbereiche können nicht angezeigt werden, Fehler: " + ex.Message);
             }
-            
+
         }
 
         private void dispTier()
@@ -74,12 +86,12 @@ namespace DatenBankZoo
 
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Tiere können nicht angezeigt werden, Fehler: " + ex.Message);
             }
 
-            
+
         }
 
         private void dispTierart()
@@ -95,11 +107,11 @@ namespace DatenBankZoo
                     comboBoxTierTierart.Items.Add(tiera.Name);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Tierarten können nicht angezeigt werden, Fehler: " + ex.Message);
             }
-            
+
         }
 
         private void dispGehege()
@@ -117,12 +129,77 @@ namespace DatenBankZoo
                     dataGridGehege.Rows.Add(gehege.Name, s);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Gehege können nicht angezeigt werden, Fehler: " + ex.Message);
             }
-            
+
         }
+
+        private void dispPersonal()
+        {
+            lipersonal = db.getPersonal();
+        }
+
+        private void dispPersonaleinteilung()
+        {
+            // Einteilungen aus der Datenbank abrufen
+            lieinteilung = db.getEinteilung();
+            try
+            {
+                // Einteilungen nach PersonalID gruppieren
+                var groupedEinteilungen = lieinteilung.GroupBy(e => e.Fk_personalID);
+
+                // DataGridView leeren
+                dataGridViewPersonalEinteilung.Rows.Clear();
+
+                // Über jede Mitarbeitergruppe iterieren
+                foreach (var group in groupedEinteilungen)
+                {
+                    int pnr = group.Key; // Personalnummer
+                    string name = lipersonal.Find(x => x.PersonalID == pnr).Name; // Name des Mitarbeiters
+
+                    // Listen für Haupt- und Normalpfleger-Gehege initialisieren
+                    List<string> hauptpflegerGehege = new List<string>();
+                    List<string> normalpflegerGehege = new List<string>();
+
+                    // Über alle Einteilungen des Mitarbeiters iterieren
+                    foreach (var einteilung in group)
+                    {
+                        // Gehege-Namen abrufen
+                        string gehegeName = ligehege.Find(x => x.GehegeID == einteilung.Fk_gehegeID).Name;
+
+                        // Prüfen, ob Hauptpfleger und hinzufügen
+                        if (einteilung.Hauptpfleger == 1)
+                        {
+                            hauptpflegerGehege.Add(gehegeName);
+                        }
+
+                        // Prüfen, ob Normalpfleger und hinzufügen
+                        if (einteilung.Normalpfleger == 1)
+                        {
+                            normalpflegerGehege.Add(gehegeName);
+                        }
+                    }
+
+                    // Hauptpfleger-Gehege als String formatieren
+                    string hp = hauptpflegerGehege.Count > 0 ? string.Join(", ", hauptpflegerGehege) : "Ist kein Hauptpfleger";
+
+                    // Normalpfleger-Gehege als String formatieren
+                    string np = normalpflegerGehege.Count > 0 ? string.Join(", ", normalpflegerGehege) : "Betreut sonst kein Gehege";
+
+                    // Daten zur DataGridView hinzufügen
+                    dataGridViewPersonalEinteilung.Rows.Add(pnr, name, hp, np);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Fehlermeldung anzeigen
+                MessageBox.Show("Einteilung kann nicht geladen werden, Fehler: " + ex.Message);
+            }
+        }
+
+
 
         private void buttonThemenbereichSpeichern_Click(object sender, EventArgs e)
         {
@@ -185,7 +262,7 @@ namespace DatenBankZoo
         {
             try
             {// Prüfen, ob alle erforderlichen Felder ausgefüllt sind
-            
+
                 if (string.IsNullOrWhiteSpace(tbTierName.Text) ||
                 comboBoxTierGehege.SelectedIndex == -1 ||
                 comboBoxTierTierart.SelectedIndex == -1)
@@ -211,7 +288,7 @@ namespace DatenBankZoo
                 dispTier();
                 MessageBox.Show(string.Format("{0} erfolgreich gespeichert", tier.Name));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Tier kann nicht gespeichert werden, Fehler: " + ex.Message);
             }
@@ -236,7 +313,7 @@ namespace DatenBankZoo
 
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Gehege kann nicht gespeichert werden, Fehler: " + ex.Message);
             }
@@ -259,7 +336,7 @@ namespace DatenBankZoo
                     MessageBox.Show("Bitte wählen Sie einen Themenbereich aus");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Themenbereich kann nicht gelöscht werden, Fehler: " + ex.Message);
             }
@@ -283,7 +360,7 @@ namespace DatenBankZoo
                     MessageBox.Show(string.Format("{0} erfolgreich gelöscht", name));
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Tierart kann nicht gelöscht werden, Fehler: " + ex.Message);
             }
@@ -314,7 +391,7 @@ namespace DatenBankZoo
                     MessageBox.Show("Bitte eine Zeile auswählen, die gelöscht werden soll.", "Hinweis", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Tier kann nicht gelöscht werden, Fehler: " + ex.Message);
             }
@@ -322,216 +399,341 @@ namespace DatenBankZoo
 
         private void buttonGehegeLoeschen_Click(object sender, EventArgs e)
         {
-            if(dataGridGehege.SelectedRows.Count > 0)
+            try
             {
-                int selectedRowIndex = dataGridGehege.SelectedRows[0].Index;
-                string gehegeName = tbGehegeName.Text;
-                
-                db.delGehege(ligehege[selectedRowIndex].GehegeID);
-                dataGridGehege.Rows.Clear();
-                
-                dispGehege();
-                MessageBox.Show(string.Format("{0} erfolgreich hinzufgefügt", gehegeName));
+                if (dataGridGehege.SelectedRows.Count > 0)
+                {
+                    int selectedRowIndex = dataGridGehege.SelectedRows[0].Index;
+                    string gehegeName = tbGehegeName.Text;
+
+                    db.delGehege(ligehege[selectedRowIndex].GehegeID);
+                    dataGridGehege.Rows.Clear();
+
+                    dispGehege();
+                    MessageBox.Show(string.Format("{0} erfolgreich hinzufgefügt", gehegeName));
+                }
+                else
+                {
+                    MessageBox.Show("Bitte eine Zeile auswählen, die gelöscht werden soll.", "Hinweis", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Bitte eine Zeile auswählen, die gelöscht werden soll.", "Hinweis", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Gehege kann nicht gelöscht werden: " + ex.Message);
             }
+
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listBoxThemenbereiche.SelectedIndex != -1)
+            try
             {
-                tbTheme.Text = liTheme[listBoxThemenbereiche.SelectedIndex].TName1;
+                if (listBoxThemenbereiche.SelectedIndex != -1)
+                {
+                    tbTheme.Text = liTheme[listBoxThemenbereiche.SelectedIndex].TName1;
+                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
 
         }
 
         private void buttonThemenbereichNeu_Click(object sender, EventArgs e)
         {
-            listBoxThemenbereiche.SelectedIndex = -1;
-            tbTheme.Text = "";
+            try
+            {
+                listBoxThemenbereiche.SelectedIndex = -1;
+                tbTheme.Text = "";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
         private void listBoxTierart_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listBoxTierart.SelectedIndex != -1)
+            try
             {
-                tbTierart.Text = litiera[listBoxTierart.SelectedIndex].Name;
+                if (listBoxTierart.SelectedIndex != -1)
+                {
+                    tbTierart.Text = litiera[listBoxTierart.SelectedIndex].Name;
+                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+
         }
 
         private void buttonNeuTierart_Click(object sender, EventArgs e)
         {
-            listBoxTierart.SelectedIndex = -1;
-            tbTierart.Text = "";
+            try
+            {
+                listBoxTierart.SelectedIndex = -1;
+                tbTierart.Text = "";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
         private void buttonTierNeu_Click(object sender, EventArgs e)
         {
-            dataGridViewTiere.ClearSelection();
+            try
+            {
+                dataGridViewTiere.ClearSelection();
 
-            tbTierName.Text = "";
-            lbTierIDWert.Text = "";
-            comboBoxTierGehege.SelectedIndex = -1;
-            comboBoxTierTierart.SelectedIndex = -1;
-            comboBoxTierThemenbereich.SelectedIndex = -1;
+                tbTierName.Text = "";
+                lbTierIDWert.Text = "";
+                comboBoxTierGehege.SelectedIndex = -1;
+                comboBoxTierTierart.SelectedIndex = -1;
+                comboBoxTierThemenbereich.SelectedIndex = -1;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es kann kein neues Tier angelegt werden Fehler: " + ex.Message);
+            }
+
         }
 
         private void buttonGehegeNeu_Click(object sender, EventArgs e)
         {
-            dataGridGehege.ClearSelection();
-            tbGehegeName.Text = "";
-            comboBoxThemenBereiche.SelectedIndex = -1;
+            try
+            {
+                dataGridGehege.ClearSelection();
+                tbGehegeName.Text = "";
+                comboBoxThemenBereiche.SelectedIndex = -1;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es kann kein neues Gehege angelegt werden. Fehler: " + ex.Message);
+            }
+
         }
 
         private void dataGridGehege_SelectionChanged(object sender, EventArgs e)
         {
-            int index = dataGridGehege.CurrentRow.Index;
-            tbGehegeName.Text = ligehege[index].Name;
+            try
+            {
+                int index = dataGridGehege.CurrentRow.Index;
+                tbGehegeName.Text = ligehege[index].Name;
 
-            index = liTheme.FindIndex(x => x.TNr1 == ligehege[index].ThemenbereichID);
-            comboBoxThemenBereiche.SelectedIndex = index;
+                index = liTheme.FindIndex(x => x.TNr1 == ligehege[index].ThemenbereichID);
+                comboBoxThemenBereiche.SelectedIndex = index;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
         private void dataGridViewTiere_SelectionChanged(object sender, EventArgs e)
         {
-            if (dataGridViewTiere.CurrentRow.Index >= 0)
+            try
             {
-
-                int tierIndex = dataGridViewTiere.CurrentRow.Index;
-
-                lbTierIDWert.Text = litier[tierIndex].TierID.ToString();
-                tbTierName.Text = litier[tierIndex].Name;
-
-
-                int gehegeIndex = ligehege.FindIndex(x => x.GehegeID == litier[tierIndex].GehegeID);
-                if (gehegeIndex >= 0)
-                {
-                    comboBoxTierGehege.SelectedIndex = gehegeIndex;
-                }
-
-
-                int tierartIndex = litiera.FindIndex(x => x.TierartId == litier[tierIndex].TierartID);
-                if (tierartIndex >= 0)
-                {
-                    comboBoxTierTierart.SelectedIndex = tierartIndex;
-                }
-
-
-                if (gehegeIndex >= 0)
+                if (dataGridViewTiere.CurrentRow.Index >= 0)
                 {
 
-                    int themenbereichIndex = liTheme.FindIndex(x => x.TNr1 == ligehege[gehegeIndex].ThemenbereichID);
-                    if (themenbereichIndex >= 0)
+                    int tierIndex = dataGridViewTiere.CurrentRow.Index;
+
+                    lbTierIDWert.Text = litier[tierIndex].TierID.ToString();
+                    tbTierName.Text = litier[tierIndex].Name;
+
+
+                    int gehegeIndex = ligehege.FindIndex(x => x.GehegeID == litier[tierIndex].GehegeID);
+                    if (gehegeIndex >= 0)
                     {
-                        comboBoxTierThemenbereich.SelectedIndex = themenbereichIndex;
+                        comboBoxTierGehege.SelectedIndex = gehegeIndex;
+                    }
+
+
+                    int tierartIndex = litiera.FindIndex(x => x.TierartId == litier[tierIndex].TierartID);
+                    if (tierartIndex >= 0)
+                    {
+                        comboBoxTierTierart.SelectedIndex = tierartIndex;
+                    }
+
+
+                    if (gehegeIndex >= 0)
+                    {
+
+                        int themenbereichIndex = liTheme.FindIndex(x => x.TNr1 == ligehege[gehegeIndex].ThemenbereichID);
+                        if (themenbereichIndex >= 0)
+                        {
+                            comboBoxTierThemenbereich.SelectedIndex = themenbereichIndex;
+                        }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
         private void radioButtonThemenbereichTierarten_CheckedChanged(object sender, EventArgs e)
         {
-            dataGridViewStatistik.Columns.Clear();
-            dataGridViewStatistik.Rows.Clear();
-            string rbTag = tabPageStatistik.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked).Tag.ToString();
-
-            switch (rbTag)
+            try
             {
-                case "1":
+                dataGridViewStatistik.Columns.Clear();
+                dataGridViewStatistik.Rows.Clear();
+                string rbTag = tabPageStatistik.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked).Tag.ToString();
 
-                    int AnzahlTiere = db.anzahlTiere();
+                switch (rbTag)
+                {
+                    case "1":
 
-                    dataGridViewStatistik.Columns.Add("AnzahlTiere", "Anzahl der Tiere im Zoo");
-                    dataGridViewStatistik.Rows.Add(AnzahlTiere.ToString());
+                        int AnzahlTiere = db.anzahlTiere();
 
-                    break;
+                        dataGridViewStatistik.Columns.Add("AnzahlTiere", "Anzahl der Tiere im Zoo");
+                        dataGridViewStatistik.Rows.Add(AnzahlTiere.ToString());
 
-                case "2":
+                        break;
 
-                    List<Tier> temp = new List<Tier>();
-                    temp = db.gehegeTiere();
+                    case "2":
 
-                    dataGridViewStatistik.Columns.Add("StatistikGehege", "Gehege");
-                    dataGridViewStatistik.Columns.Add("StatistikTierName", "Tier");
+                        List<Tier> temp = new List<Tier>();
+                        temp = db.gehegeTiere();
 
-                    foreach (Tier t in temp)
-                    {
-                        dataGridViewStatistik.Rows.Add(t.Gehegename, t.Name);
-                    }
+                        dataGridViewStatistik.Columns.Add("StatistikGehege", "Gehege");
+                        dataGridViewStatistik.Columns.Add("StatistikTierName", "Tier");
 
-                    break;
-                case "3":
+                        foreach (Tier t in temp)
+                        {
+                            dataGridViewStatistik.Rows.Add(t.Gehegename, t.Name);
+                        }
 
-                    List<string> tempo = db.leereGehege();
+                        break;
+                    case "3":
 
-                    dataGridViewStatistik.Columns.Add("StatistikGehegeOhneTier", "Gehege");
+                        List<string> tempo = db.leereGehege();
 
-                    foreach (string s in tempo)
-                    {
-                        dataGridViewStatistik.Rows.Add(s);
-                    }
+                        dataGridViewStatistik.Columns.Add("StatistikGehegeOhneTier", "Gehege");
 
-                    if (tempo.Count == 0)
-                    {
-                        dataGridViewStatistik.Rows.Add("Volle Bude");
+                        foreach (string s in tempo)
+                        {
+                            dataGridViewStatistik.Rows.Add(s);
+                        }
 
-                    }
+                        if (tempo.Count == 0)
+                        {
+                            dataGridViewStatistik.Rows.Add("Volle Bude");
 
-                    break;
-                case "4":
-                    int anzahl = db.anzahlVerschTierarten();
+                        }
 
-                    dataGridViewStatistik.Columns.Add("AnzahlVerschTierarten", "Anzahl der verschiedenene Tierarten in unserem Zoo.");
-                    dataGridViewStatistik.Rows.Add(anzahl.ToString());
+                        break;
+                    case "4":
+                        int anzahl = db.anzahlVerschTierarten();
 
-                    break;
-                case "5":
-                    List<List<string>> list = new List<List<string>>();
+                        dataGridViewStatistik.Columns.Add("AnzahlVerschTierarten", "Anzahl der verschiedenene Tierarten in unserem Zoo.");
+                        dataGridViewStatistik.Rows.Add(anzahl.ToString());
 
-                    list = db.wievieleTiereTierart();
-                    dataGridViewStatistik.Columns.Add("Tierarten", "Tierarten");
-                    dataGridViewStatistik.Columns.Add("AnzahlTierarten", "Anzahl der Tierarten");
+                        break;
+                    case "5":
+                        List<List<string>> list = new List<List<string>>();
 
-                    foreach (List<string> t in list)
-                    {
-                        dataGridViewStatistik.Rows.Add(t[0], t[1]);
-                    }
+                        list = db.wievieleTiereTierart();
+                        dataGridViewStatistik.Columns.Add("Tierarten", "Tierarten");
+                        dataGridViewStatistik.Columns.Add("AnzahlTierarten", "Anzahl der Tierarten");
 
-                    break;
-                case "6":
-                    List<string> tempa = db.leereThemenbereiche();
+                        foreach (List<string> t in list)
+                        {
+                            dataGridViewStatistik.Rows.Add(t[0], t[1]);
+                        }
 
-                    dataGridViewStatistik.Columns.Add("StatistikThemenbereicheOhneGehege", "Themenbereiche");
+                        break;
+                    case "6":
+                        List<string> tempa = db.leereThemenbereiche();
 
-                    foreach (string t in tempa)
-                    {
-                        dataGridViewStatistik.Rows.Add(t);
-                    }
+                        dataGridViewStatistik.Columns.Add("StatistikThemenbereicheOhneGehege", "Themenbereiche");
 
-                    if (tempa.Count == 0)
-                    {
-                        dataGridViewStatistik.Rows.Add("Alle Themenbereiche besitzen Gehege");
-                    }
-                    break;
-                case "7":
-                    List<List<string>> listdeux = new List<List<string>>();
+                        foreach (string t in tempa)
+                        {
+                            dataGridViewStatistik.Rows.Add(t);
+                        }
 
-                    listdeux = db.welcheTierartThemenbereich();
-                    dataGridViewStatistik.Columns.Add("Themenbereiche", "Themenbereich");
-                    dataGridViewStatistik.Columns.Add("Tierarten", "Tierart");
+                        if (tempa.Count == 0)
+                        {
+                            dataGridViewStatistik.Rows.Add("Alle Themenbereiche besitzen Gehege");
+                        }
+                        break;
+                    case "7":
+                        List<List<string>> listdeux = new List<List<string>>();
 
-                    foreach (List<string> t in listdeux)
-                    {
-                        dataGridViewStatistik.Rows.Add(t[0], t[1]);
-                    }
+                        listdeux = db.welcheTierartThemenbereich();
+                        dataGridViewStatistik.Columns.Add("Themenbereiche", "Themenbereich");
+                        dataGridViewStatistik.Columns.Add("Tierarten", "Tierart");
 
-                    break;
+                        foreach (List<string> t in listdeux)
+                        {
+                            dataGridViewStatistik.Rows.Add(t[0], t[1]);
+                        }
 
+                        break;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Option kann nicht ausgewählt werden, Fehler: " + ex.Message);
             }
         }
 
+        private void dataGridViewPersonalEinteilung_SelectionChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                // Annahme: Du möchtest den Wert der Zelle in der 2. Zeile und 3. Spalte (Index 2) abfragen
+                int zeilenIndex = dataGridViewPersonalEinteilung.CurrentRow.Index;
+
+                for (int i = 0; i < dataGridViewPersonalEinteilung.Columns.Count; i++)
+                {
+                    int spaltenIndex = i;
+                    
+
+                    if (dataGridViewPersonalEinteilung.CurrentRow.Index >= 0)
+                    {
+                        switch (spaltenIndex)
+                        {
+                            case 0:
+                                var zWert1 = dataGridViewPersonalEinteilung.Rows[zeilenIndex].Cells[spaltenIndex].Value;
+
+                                lbPersonalIDWert.Text = zWert1.ToString();
+
+                                break;
+                            case 1:
+                                var zWert2 = dataGridViewPersonalEinteilung.Rows[zeilenIndex].Cells[spaltenIndex].Value;
+
+                                textBoxArbeitskraft.Text = zWert2.ToString();
+
+                                break;
+                            case 2:
+
+
+                                break;
+                            case 3:
+
+
+                                break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 }
