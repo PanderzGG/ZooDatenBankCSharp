@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             tabControl1 = new TabControl();
-            tabPage1 = new TabPage();
+            tabPageThemenbereiche = new TabPage();
             buttonThemenbereichNeu = new Button();
             buttonLoeschen = new Button();
             buttonThemenbereichSpeichern = new Button();
             listBoxThemenbereiche = new ListBox();
             tbTheme = new TextBox();
             label1 = new Label();
-            tabPage2 = new TabPage();
+            tabPageGehege = new TabPage();
             buttonGehegeLoeschen = new Button();
             buttonGehegeNeu = new Button();
             dataGridGehege = new DataGridView();
@@ -47,14 +47,14 @@
             comboBoxThemenBereiche = new ComboBox();
             tbGehegeName = new TextBox();
             lbGehegeName = new Label();
-            tabPage3 = new TabPage();
+            tabPageTierarten = new TabPage();
             buttonLöschenTierart = new Button();
             buttonNeuTierart = new Button();
             buttonSpeichernTierart = new Button();
             listBoxTierart = new ListBox();
             tbTierart = new TextBox();
             lbTierart = new Label();
-            tabPage4 = new TabPage();
+            tabPageTiere = new TabPage();
             comboBoxTierThemenbereich = new ComboBox();
             lbTierThemenbereich = new Label();
             buttonTierLoeschen = new Button();
@@ -82,7 +82,7 @@
             radioButtonLeereGehege = new RadioButton();
             radioButtonWelcheTiereGehege = new RadioButton();
             radioButtonAnzahlTiereZoo = new RadioButton();
-            tabPagePersonal = new TabPage();
+            tabPagePersonalEinteilung = new TabPage();
             listBoxNormalPfleger = new ListBox();
             listBoxHauptpfleger = new ListBox();
             lbNormalPfleger = new Label();
@@ -97,48 +97,48 @@
             GehegeHauptpfleger = new DataGridViewTextBoxColumn();
             GehegeNormalPfleger = new DataGridViewTextBoxColumn();
             tabControl1.SuspendLayout();
-            tabPage1.SuspendLayout();
-            tabPage2.SuspendLayout();
+            tabPageThemenbereiche.SuspendLayout();
+            tabPageGehege.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridGehege).BeginInit();
-            tabPage3.SuspendLayout();
-            tabPage4.SuspendLayout();
+            tabPageTierarten.SuspendLayout();
+            tabPageTiere.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewTiere).BeginInit();
             tabPageStatistik.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewStatistik).BeginInit();
-            tabPagePersonal.SuspendLayout();
+            tabPagePersonalEinteilung.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewPersonalEinteilung).BeginInit();
             SuspendLayout();
             // 
             // tabControl1
             // 
             tabControl1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            tabControl1.Controls.Add(tabPage1);
-            tabControl1.Controls.Add(tabPage2);
-            tabControl1.Controls.Add(tabPage3);
-            tabControl1.Controls.Add(tabPage4);
+            tabControl1.Controls.Add(tabPageThemenbereiche);
+            tabControl1.Controls.Add(tabPageGehege);
+            tabControl1.Controls.Add(tabPageTierarten);
+            tabControl1.Controls.Add(tabPageTiere);
             tabControl1.Controls.Add(tabPageStatistik);
-            tabControl1.Controls.Add(tabPagePersonal);
+            tabControl1.Controls.Add(tabPagePersonalEinteilung);
             tabControl1.Location = new Point(12, 12);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
             tabControl1.Size = new Size(627, 466);
             tabControl1.TabIndex = 0;
             // 
-            // tabPage1
+            // tabPageThemenbereiche
             // 
-            tabPage1.Controls.Add(buttonThemenbereichNeu);
-            tabPage1.Controls.Add(buttonLoeschen);
-            tabPage1.Controls.Add(buttonThemenbereichSpeichern);
-            tabPage1.Controls.Add(listBoxThemenbereiche);
-            tabPage1.Controls.Add(tbTheme);
-            tabPage1.Controls.Add(label1);
-            tabPage1.Location = new Point(4, 24);
-            tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(619, 438);
-            tabPage1.TabIndex = 0;
-            tabPage1.Text = "Themenbereiche";
-            tabPage1.UseVisualStyleBackColor = true;
+            tabPageThemenbereiche.Controls.Add(buttonThemenbereichNeu);
+            tabPageThemenbereiche.Controls.Add(buttonLoeschen);
+            tabPageThemenbereiche.Controls.Add(buttonThemenbereichSpeichern);
+            tabPageThemenbereiche.Controls.Add(listBoxThemenbereiche);
+            tabPageThemenbereiche.Controls.Add(tbTheme);
+            tabPageThemenbereiche.Controls.Add(label1);
+            tabPageThemenbereiche.Location = new Point(4, 24);
+            tabPageThemenbereiche.Name = "tabPageThemenbereiche";
+            tabPageThemenbereiche.Padding = new Padding(3);
+            tabPageThemenbereiche.Size = new Size(619, 438);
+            tabPageThemenbereiche.TabIndex = 0;
+            tabPageThemenbereiche.Text = "Themenbereiche";
+            tabPageThemenbereiche.UseVisualStyleBackColor = true;
             // 
             // buttonThemenbereichNeu
             // 
@@ -202,23 +202,23 @@
             label1.TabIndex = 0;
             label1.Text = "Name:";
             // 
-            // tabPage2
+            // tabPageGehege
             // 
-            tabPage2.Controls.Add(buttonGehegeLoeschen);
-            tabPage2.Controls.Add(buttonGehegeNeu);
-            tabPage2.Controls.Add(dataGridGehege);
-            tabPage2.Controls.Add(buttonGehegeSpeichern);
-            tabPage2.Controls.Add(labelGehegeThemenBereich);
-            tabPage2.Controls.Add(comboBoxThemenBereiche);
-            tabPage2.Controls.Add(tbGehegeName);
-            tabPage2.Controls.Add(lbGehegeName);
-            tabPage2.Location = new Point(4, 24);
-            tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(619, 438);
-            tabPage2.TabIndex = 1;
-            tabPage2.Text = "Gehege";
-            tabPage2.UseVisualStyleBackColor = true;
+            tabPageGehege.Controls.Add(buttonGehegeLoeschen);
+            tabPageGehege.Controls.Add(buttonGehegeNeu);
+            tabPageGehege.Controls.Add(dataGridGehege);
+            tabPageGehege.Controls.Add(buttonGehegeSpeichern);
+            tabPageGehege.Controls.Add(labelGehegeThemenBereich);
+            tabPageGehege.Controls.Add(comboBoxThemenBereiche);
+            tabPageGehege.Controls.Add(tbGehegeName);
+            tabPageGehege.Controls.Add(lbGehegeName);
+            tabPageGehege.Location = new Point(4, 24);
+            tabPageGehege.Name = "tabPageGehege";
+            tabPageGehege.Padding = new Padding(3);
+            tabPageGehege.Size = new Size(619, 438);
+            tabPageGehege.TabIndex = 1;
+            tabPageGehege.Text = "Gehege";
+            tabPageGehege.UseVisualStyleBackColor = true;
             // 
             // buttonGehegeLoeschen
             // 
@@ -312,20 +312,20 @@
             lbGehegeName.TabIndex = 0;
             lbGehegeName.Text = "Gegehe-Name";
             // 
-            // tabPage3
+            // tabPageTierarten
             // 
-            tabPage3.Controls.Add(buttonLöschenTierart);
-            tabPage3.Controls.Add(buttonNeuTierart);
-            tabPage3.Controls.Add(buttonSpeichernTierart);
-            tabPage3.Controls.Add(listBoxTierart);
-            tabPage3.Controls.Add(tbTierart);
-            tabPage3.Controls.Add(lbTierart);
-            tabPage3.Location = new Point(4, 24);
-            tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(619, 438);
-            tabPage3.TabIndex = 2;
-            tabPage3.Text = "Tierarten";
-            tabPage3.UseVisualStyleBackColor = true;
+            tabPageTierarten.Controls.Add(buttonLöschenTierart);
+            tabPageTierarten.Controls.Add(buttonNeuTierart);
+            tabPageTierarten.Controls.Add(buttonSpeichernTierart);
+            tabPageTierarten.Controls.Add(listBoxTierart);
+            tabPageTierarten.Controls.Add(tbTierart);
+            tabPageTierarten.Controls.Add(lbTierart);
+            tabPageTierarten.Location = new Point(4, 24);
+            tabPageTierarten.Name = "tabPageTierarten";
+            tabPageTierarten.Size = new Size(619, 438);
+            tabPageTierarten.TabIndex = 2;
+            tabPageTierarten.Text = "Tierarten";
+            tabPageTierarten.UseVisualStyleBackColor = true;
             // 
             // buttonLöschenTierart
             // 
@@ -389,28 +389,28 @@
             lbTierart.TabIndex = 0;
             lbTierart.Text = "Tierart";
             // 
-            // tabPage4
+            // tabPageTiere
             // 
-            tabPage4.Controls.Add(comboBoxTierThemenbereich);
-            tabPage4.Controls.Add(lbTierThemenbereich);
-            tabPage4.Controls.Add(buttonTierLoeschen);
-            tabPage4.Controls.Add(buttonTierSpeichern);
-            tabPage4.Controls.Add(buttonTierNeu);
-            tabPage4.Controls.Add(comboBoxTierTierart);
-            tabPage4.Controls.Add(comboBoxTierGehege);
-            tabPage4.Controls.Add(tbTierName);
-            tabPage4.Controls.Add(lbTierTierart);
-            tabPage4.Controls.Add(lbTierGehege);
-            tabPage4.Controls.Add(lbTiername);
-            tabPage4.Controls.Add(lbTierIDWert);
-            tabPage4.Controls.Add(lbTierIDText);
-            tabPage4.Controls.Add(dataGridViewTiere);
-            tabPage4.Location = new Point(4, 24);
-            tabPage4.Name = "tabPage4";
-            tabPage4.Size = new Size(619, 438);
-            tabPage4.TabIndex = 3;
-            tabPage4.Text = "Tiere";
-            tabPage4.UseVisualStyleBackColor = true;
+            tabPageTiere.Controls.Add(comboBoxTierThemenbereich);
+            tabPageTiere.Controls.Add(lbTierThemenbereich);
+            tabPageTiere.Controls.Add(buttonTierLoeschen);
+            tabPageTiere.Controls.Add(buttonTierSpeichern);
+            tabPageTiere.Controls.Add(buttonTierNeu);
+            tabPageTiere.Controls.Add(comboBoxTierTierart);
+            tabPageTiere.Controls.Add(comboBoxTierGehege);
+            tabPageTiere.Controls.Add(tbTierName);
+            tabPageTiere.Controls.Add(lbTierTierart);
+            tabPageTiere.Controls.Add(lbTierGehege);
+            tabPageTiere.Controls.Add(lbTiername);
+            tabPageTiere.Controls.Add(lbTierIDWert);
+            tabPageTiere.Controls.Add(lbTierIDText);
+            tabPageTiere.Controls.Add(dataGridViewTiere);
+            tabPageTiere.Location = new Point(4, 24);
+            tabPageTiere.Name = "tabPageTiere";
+            tabPageTiere.Size = new Size(619, 438);
+            tabPageTiere.TabIndex = 3;
+            tabPageTiere.Text = "Tiere";
+            tabPageTiere.UseVisualStyleBackColor = true;
             // 
             // comboBoxTierThemenbereich
             // 
@@ -677,24 +677,24 @@
             radioButtonAnzahlTiereZoo.UseVisualStyleBackColor = true;
             radioButtonAnzahlTiereZoo.CheckedChanged += radioButtonThemenbereichTierarten_CheckedChanged;
             // 
-            // tabPagePersonal
+            // tabPagePersonalEinteilung
             // 
-            tabPagePersonal.Controls.Add(listBoxNormalPfleger);
-            tabPagePersonal.Controls.Add(listBoxHauptpfleger);
-            tabPagePersonal.Controls.Add(lbNormalPfleger);
-            tabPagePersonal.Controls.Add(lbHauptpfleger);
-            tabPagePersonal.Controls.Add(textBoxArbeitskraft);
-            tabPagePersonal.Controls.Add(lbPersonalName);
-            tabPagePersonal.Controls.Add(lbPersonalIDWert);
-            tabPagePersonal.Controls.Add(lbPersonalID);
-            tabPagePersonal.Controls.Add(dataGridViewPersonalEinteilung);
-            tabPagePersonal.Location = new Point(4, 24);
-            tabPagePersonal.Name = "tabPagePersonal";
-            tabPagePersonal.Padding = new Padding(3);
-            tabPagePersonal.Size = new Size(619, 438);
-            tabPagePersonal.TabIndex = 5;
-            tabPagePersonal.Text = "Personal";
-            tabPagePersonal.UseVisualStyleBackColor = true;
+            tabPagePersonalEinteilung.Controls.Add(listBoxNormalPfleger);
+            tabPagePersonalEinteilung.Controls.Add(listBoxHauptpfleger);
+            tabPagePersonalEinteilung.Controls.Add(lbNormalPfleger);
+            tabPagePersonalEinteilung.Controls.Add(lbHauptpfleger);
+            tabPagePersonalEinteilung.Controls.Add(textBoxArbeitskraft);
+            tabPagePersonalEinteilung.Controls.Add(lbPersonalName);
+            tabPagePersonalEinteilung.Controls.Add(lbPersonalIDWert);
+            tabPagePersonalEinteilung.Controls.Add(lbPersonalID);
+            tabPagePersonalEinteilung.Controls.Add(dataGridViewPersonalEinteilung);
+            tabPagePersonalEinteilung.Location = new Point(4, 24);
+            tabPagePersonalEinteilung.Name = "tabPagePersonalEinteilung";
+            tabPagePersonalEinteilung.Padding = new Padding(3);
+            tabPagePersonalEinteilung.Size = new Size(619, 438);
+            tabPagePersonalEinteilung.TabIndex = 5;
+            tabPagePersonalEinteilung.Text = "Personaleinteilung";
+            tabPagePersonalEinteilung.UseVisualStyleBackColor = true;
             // 
             // listBoxNormalPfleger
             // 
@@ -704,6 +704,7 @@
             listBoxNormalPfleger.Name = "listBoxNormalPfleger";
             listBoxNormalPfleger.Size = new Size(120, 124);
             listBoxNormalPfleger.TabIndex = 8;
+            listBoxNormalPfleger.DoubleClick += listBoxNormalPfleger_DoubleClick;
             // 
             // listBoxHauptpfleger
             // 
@@ -713,6 +714,7 @@
             listBoxHauptpfleger.Name = "listBoxHauptpfleger";
             listBoxHauptpfleger.Size = new Size(120, 124);
             listBoxHauptpfleger.TabIndex = 7;
+            listBoxHauptpfleger.DoubleClick += listBoxHauptpfleger_DoubleClick;
             // 
             // lbNormalPfleger
             // 
@@ -736,6 +738,7 @@
             // 
             textBoxArbeitskraft.Location = new Point(200, 51);
             textBoxArbeitskraft.Name = "textBoxArbeitskraft";
+            textBoxArbeitskraft.ReadOnly = true;
             textBoxArbeitskraft.Size = new Size(100, 23);
             textBoxArbeitskraft.TabIndex = 4;
             // 
@@ -815,21 +818,21 @@
             Text = "Form1";
             Load += Form1_Load;
             tabControl1.ResumeLayout(false);
-            tabPage1.ResumeLayout(false);
-            tabPage1.PerformLayout();
-            tabPage2.ResumeLayout(false);
-            tabPage2.PerformLayout();
+            tabPageThemenbereiche.ResumeLayout(false);
+            tabPageThemenbereiche.PerformLayout();
+            tabPageGehege.ResumeLayout(false);
+            tabPageGehege.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridGehege).EndInit();
-            tabPage3.ResumeLayout(false);
-            tabPage3.PerformLayout();
-            tabPage4.ResumeLayout(false);
-            tabPage4.PerformLayout();
+            tabPageTierarten.ResumeLayout(false);
+            tabPageTierarten.PerformLayout();
+            tabPageTiere.ResumeLayout(false);
+            tabPageTiere.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewTiere).EndInit();
             tabPageStatistik.ResumeLayout(false);
             tabPageStatistik.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewStatistik).EndInit();
-            tabPagePersonal.ResumeLayout(false);
-            tabPagePersonal.PerformLayout();
+            tabPagePersonalEinteilung.ResumeLayout(false);
+            tabPagePersonalEinteilung.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewPersonalEinteilung).EndInit();
             ResumeLayout(false);
         }
@@ -837,11 +840,11 @@
         #endregion
 
         private TabControl tabControl1;
-        private TabPage tabPage1;
+        private TabPage tabPageThemenbereiche;
         private Label label1;
-        private TabPage tabPage2;
-        private TabPage tabPage3;
-        private TabPage tabPage4;
+        private TabPage tabPageGehege;
+        private TabPage tabPageTierarten;
+        private TabPage tabPageTiere;
         private ListBox listBoxThemenbereiche;
         private TextBox tbTheme;
         private Button buttonThemenbereichSpeichern;
@@ -890,7 +893,7 @@
         private DataGridView dataGridViewStatistik;
         private Button buttonGehegeLoeschen;
         private Button buttonGehegeNeu;
-        private TabPage tabPagePersonal;
+        private TabPage tabPagePersonalEinteilung;
         private DataGridView dataGridViewPersonalEinteilung;
         private Label lbNormalPfleger;
         private Label lbHauptpfleger;

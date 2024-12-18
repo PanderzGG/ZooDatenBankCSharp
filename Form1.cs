@@ -700,7 +700,7 @@ namespace DatenBankZoo
                 for (int i = 0; i < dataGridViewPersonalEinteilung.Columns.Count; i++)
                 {
                     int spaltenIndex = i;
-                    
+
 
                     if (dataGridViewPersonalEinteilung.CurrentRow.Index >= 0)
                     {
@@ -719,11 +719,22 @@ namespace DatenBankZoo
 
                                 break;
                             case 2:
+                                var zWert3 = dataGridViewPersonalEinteilung.Rows[zeilenIndex].Cells[spaltenIndex].Value;
 
+                                listBoxHauptpfleger.Items.Clear();
+                                listBoxHauptpfleger.Items.Add(zWert3.ToString());
 
                                 break;
                             case 3:
+                                var zWert4 = dataGridViewPersonalEinteilung.Rows[zeilenIndex].Cells[spaltenIndex].Value;
+                                string[] normpf = zWert4.ToString().Split(',');
 
+                                listBoxNormalPfleger.Items.Clear();
+
+                                for (int j = 0; j < normpf.Length; j++)
+                                {
+                                    listBoxNormalPfleger.Items.Add(normpf[j].Trim());
+                                }
 
                                 break;
                         }
@@ -734,6 +745,82 @@ namespace DatenBankZoo
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void listBoxHauptpfleger_DoubleClick(object sender, EventArgs e)
+        {
+            tabControl1.SelectedTab = tabPageGehege;
+
+            try
+            {
+                int zeilenIndex = dataGridViewPersonalEinteilung.CurrentRow.Index;
+                int spaltenIndex = 2; // Spalte mit dem Gehege-Namen
+
+                var zWert = dataGridViewPersonalEinteilung.Rows[zeilenIndex].Cells[spaltenIndex].Value;
+
+                string select = zWert.ToString();
+
+                for (int i = 0; i < dataGridGehege.Rows.Count; i++)
+                {
+                    if (dataGridGehege.Rows[i].Cells[0].Value != null &&
+                        dataGridGehege.Rows[i].Cells[0].Value.ToString() == select)
+                    {
+                        dataGridGehege.ClearSelection();
+                        dataGridGehege.Rows[i].Selected = true;
+                        dataGridGehege.CurrentCell = dataGridGehege.Rows[i].Cells[0];
+
+                        int index = dataGridGehege.CurrentRow.Index;
+                        tbGehegeName.Text = ligehege[index].Name;
+
+                        index = liTheme.FindIndex(x => x.TNr1 == ligehege[index].ThemenbereichID);
+                        comboBoxThemenBereiche.SelectedIndex = index;
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void listBoxNormalPfleger_DoubleClick(object sender, EventArgs e)
+        {
+            //tabControl1.SelectedTab = tabPageGehege;
+
+            //try
+            //{
+            //    int zeilenIndex = dataGridViewPersonalEinteilung.CurrentRow.Index;
+            //    int spaltenIndex = 3; // Spalte mit dem Gehege-Namen
+
+            //    var zWert = dataGridViewPersonalEinteilung.Rows[zeilenIndex].Cells[spaltenIndex].Value;
+
+            //    string select = zWert.ToString();
+
+            //    MessageBox.Show(zWert.ToString());
+
+            //    for (int i = 0; i < dataGridGehege.Rows.Count; i++)
+            //    {
+            //        if (dataGridGehege.Rows[i].Cells[0].Value != null &&
+            //            dataGridGehege.Rows[i].Cells[0].Value.ToString() == select)
+            //        {
+            //            dataGridGehege.ClearSelection();
+            //            dataGridGehege.Rows[i].Selected = true;
+            //            dataGridGehege.CurrentCell = dataGridGehege.Rows[i].Cells[0];
+
+            //            int index = dataGridGehege.CurrentRow.Index;
+            //            tbGehegeName.Text = ligehege[index].Name;
+
+            //            index = liTheme.FindIndex(x => x.TNr1 == ligehege[index].ThemenbereichID);
+            //            comboBoxThemenBereiche.SelectedIndex = index;
+            //            break;
+            //        }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message);
+            //}
         }
     }
 }
