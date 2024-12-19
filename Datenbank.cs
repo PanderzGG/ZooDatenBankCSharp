@@ -20,7 +20,8 @@ namespace DatenBankZoo
             con = new MySqlConnection(connectionString);
             
         }
-
+        
+        #region Neu Anlegen
         public void newThemenbereich(Themenbereiche theme)
         {
             try
@@ -104,7 +105,9 @@ namespace DatenBankZoo
             com.ExecuteNonQuery();
             schliessen();
         }
+        #endregion
 
+        #region Löschen
         public void delThemenbereich(int id)
         {
             oeffnen();
@@ -149,6 +152,9 @@ namespace DatenBankZoo
             schliessen();
         }
 
+        #endregion
+
+        #region SQL queries GET
         public List<Themenbereiche> getThemenbereiche()
         {
             List<Themenbereiche> liko = new List<Themenbereiche>();
@@ -159,7 +165,7 @@ namespace DatenBankZoo
                 com.CommandText = "SELECT * FROM themenbereich ORDER BY Name";
                 // Sendet die oben geschriebene query ab
                 MySqlDataReader reader = com.ExecuteReader();
-                while(reader.Read())
+                while (reader.Read())
                 {
                     liko.Add(
                         new Themenbereiche(
@@ -171,7 +177,7 @@ namespace DatenBankZoo
                 }
                 reader.Close();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -229,7 +235,7 @@ namespace DatenBankZoo
                 }
                 reader.Close();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("In der getGehege ist was schief gelaufen: " + ex.Message);
             }
@@ -247,7 +253,7 @@ namespace DatenBankZoo
                 com.CommandText = "SELECT * FROM Tier ORDER BY Name";
                 MySqlDataReader reader = com.ExecuteReader();
 
-                while(reader.Read())
+                while (reader.Read())
                 {
                     liTier.Add(
                             new Tier(
@@ -260,7 +266,7 @@ namespace DatenBankZoo
                 }
                 reader.Close();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("In der getTier ist was schief gelaufen: " + ex.Message);
             }
@@ -289,7 +295,7 @@ namespace DatenBankZoo
                 }
                 reader.Close();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -322,7 +328,7 @@ namespace DatenBankZoo
                 }
                 reader.Close();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -330,8 +336,72 @@ namespace DatenBankZoo
             return liEinteilung;
         }
 
-        
+        public List<Futter> getFutter()
+        {
+            List<Futter> lifutter = new List<Futter>();
+            oeffnen();
+            try
+            {
+                MySqlCommand com = con.CreateCommand();
+                com.CommandText = "SELECT * FROM futter order by FutterID desc;";
+                MySqlDataReader reader = com.ExecuteReader();
 
+                while (reader.Read())
+                {
+                    lifutter.Add(
+                            new Futter(
+                                reader.GetInt32("FutterID"),
+                                reader.GetString("FutterBezeichnung"),
+                                reader.GetString("FutterEinheit")
+                                )
+                        );
+                }
+                reader.Close();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            schliessen();
+            return lifutter;
+        }
+
+        public List<fuetterung> getFuetterung()
+        {
+            List<fuetterung> lifuetterung = new List<fuetterung>();
+            oeffnen();
+            try
+            {
+                MySqlCommand com = con.CreateCommand();
+                com.CommandText = "SELECT * FROM fuetterung order by TierID;";
+                MySqlDataReader reader = com.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    lifuetterung.Add(
+                        new fuetterung(
+                                reader.GetInt32("FutterID"),
+                                reader.GetInt32("TierID"),
+                                reader.GetString("Uhrezeit"),
+                                reader.GetInt32("Menge")
+                            )
+                        );
+                }
+                reader.Close();
+
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            schliessen();
+            return lifuetterung;
+        }
+
+        #endregion
+
+        #region SQL connection
         private void oeffnen()
         {
             try
@@ -344,6 +414,24 @@ namespace DatenBankZoo
             }
         }
 
+        private void schliessen()
+        {
+            try
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region Random SQL Queries
         public int anzahlTiere()
         {
             int anzahl = 0;
@@ -353,7 +441,7 @@ namespace DatenBankZoo
             com.CommandText = "SELECT COUNT(TierID) from tier;";
             MySqlDataReader reader = com.ExecuteReader();
 
-            if(reader.Read())
+            if (reader.Read())
             {
                 anzahl = reader.GetInt32(0);
             }
@@ -388,7 +476,7 @@ namespace DatenBankZoo
         public int anzahlVerschTierarten()
         {
             int anzahl = 0;
-            
+
             oeffnen();
             MySqlCommand com = con.CreateCommand();
             com.CommandText = "SELECT COUNT(DISTINCT TierartID) FROM Tier;";
@@ -406,10 +494,10 @@ namespace DatenBankZoo
 
         public List<List<string>> wievieleTiereTierart()
         {
-            List<List<string>> list = new List<List<string>>(); 
-            
+            List<List<string>> list = new List<List<string>>();
+
             oeffnen();
-            
+
             MySqlCommand com = con.CreateCommand();
             com.CommandText = "SELECT t.Name AS Tierart, COUNT(*) AS AnzahlTiere FROM Tier ti JOIN Tierart t ON ti.TierartID = t.TierartID GROUP BY ti.TierartID;";
             MySqlDataReader reader = com.ExecuteReader();
@@ -444,7 +532,7 @@ namespace DatenBankZoo
             com.CommandText = "SELECT t.Name AS Tierart, th.Name AS Themenbereich FROM Tier ti JOIN Gehege g ON ti.GehegeID = g.GehegeID JOIN Themenbereich th ON g.ThemenbereichID = th.ThemenbereichID JOIN Tierart t ON ti.TierartID = t.TierartID ORDER BY th.Name, t.Name;";
             MySqlDataReader reader = com.ExecuteReader();
 
-            while(reader.Read())
+            while (reader.Read())
             {
                 List<string> temp = new List<string>();
 
@@ -473,7 +561,7 @@ namespace DatenBankZoo
             {
                 list.Add(reader.GetString("Gehege"));
             }
-            
+
             reader.Close();
             schliessen();
             return list;
@@ -498,19 +586,8 @@ namespace DatenBankZoo
             return list;
         }
 
-        private void schliessen()
-        {
-            try
-            {
-                if(con != null)
-                {
-                    con.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
+        #endregion
+
+
     }
 }
